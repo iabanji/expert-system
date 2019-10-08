@@ -1,0 +1,21 @@
+plugins:
+  - babel
+  - jest
+env:
+  node: true
+  jest: true
+parser: babel-eslint
+extends:
+  - 'airbnb-base'
+  - 'plugin:jest/recommended'
+rules:
+  no-console: 0
+  semi:
+    - error
+    - never
+  # new block empty line
+  padded-blocks: off
+  # eslint-disable-next-line 
+  brace-style: off
+  object-shorthand: off
+  no-plusplus: off
