@@ -3,11 +3,30 @@ import readline from 'readline'
 import { evaluate, toPolish, manageString } from './polish'
 import Formatter, { data } from './formatReader'
 
+const argumentError = (arg) => {
+  if (arg.length != 3) {
+    console.log('should be 3 arguments' + "\n# npm start path_to_file")
+    process.exit()
+  }
+  if (typeof arg[2] !== 'undefined') {
+    try {
+      if (fs.existsSync(arg[2])) {
+        return fs.createReadStream(arg[2])
+      }
+      console.log('bad file ' + arg[2])
+      process.exit()
+    } catch (error) {
+      console.log('bad file ' + arg[2])
+      process.exit()
+    }
+  } else {
+    console.log('no arguments')
+    process.exit()
+  }
+}
+
 const lineReaderNew = readline.createInterface({
-  // if ( process.argv[2] ) {
-  //   throw new Error(`Not A-b character in ${element}`)
-  // }
-  input: fs.createReadStream(process.argv[2]),
+  input: argumentError(process.argv)  //fs.createReadStream(process.argv[2]),
 })
 
 lineReaderNew.on('line', (line) => {
