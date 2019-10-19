@@ -34,6 +34,7 @@ class Formatter {
 
     */
     if (!/^[A-Z+|^!()=>]*$/.test(element)) {
+
       throw new Error(`File contain NOT only A-Z or operator: |^!() in ${element}`)
     }
     if (type === 'right' && /[()]/g.test(element) && imp) {
@@ -87,6 +88,9 @@ class Formatter {
     // handle if a rules and =>
     else if (element.indexOf('=>') !== -1) {
       this.rulesFormatter(element, '=>')
+    }
+    else {
+      throw new Error('Not valid line');
     }
   }
 }

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import readline from 'readline'
-import { evaluate, toPolish, manageString } from './polish'
+import { evaluate, toPolish, manageString, validateInput } from './polish'
 import Formatter, { data } from './formatReader'
 
 const argumentError = (arg) => {
@@ -10,7 +10,7 @@ const argumentError = (arg) => {
   }
   if (typeof arg[2] !== 'undefined') {
     try {
-      if (fs.existsSync(arg[2])) {
+      if (fs.existsSync(arg[2]) && fs.lstatSync(arg[2]).isFile()) {
         return fs.createReadStream(arg[2])
       }
       console.log('bad file ' + arg[2])
@@ -45,8 +45,23 @@ lineReaderNew.on('line', (line) => {
 
 lineReaderNew.on('close', () => {
   //console.log('data before', data)
+  if (data.output.length < 1) {
+    throw new Error("Have not variables to find");
+  }
   let len = data.input.length
   for (let i = 0; i < len; i += 1) {
+    if (data.input[i].left == '' || data.input[i].right == '') {
+      throw new Error('Not valid line ' + i);
+    }
+    if (data.input[i].right.split("(").length - 1 != data.input[i].right.split(")").length - 1) {
+      throw new Error("Logical error on line " + i);
+    }
+    if (data.input[i].left.split("(").length - 1 != data.input[i].left.split(")").length - 1) {
+      throw new Error("Logical error on line " + i);
+    }
+    if (!validateInput(data.input[i])) {
+      throw new Error("Logical error on line " + i);
+    }
     evaluate(toPolish(Array.from(data.input[i].left)),
       data.input[i].right, data.input[i].imp ? 2 : 3)
   }

@@ -131,3 +131,64 @@ export const manageString = (string, value) => {
     }
   }
 }
+
+export const validateInput = (input) => {
+  const opers = ['!', '|', '+', '^']
+  let isPrevSymLiter = null
+
+  if (opers.includes(input.left.charAt(0)) && input.left.charAt(0) != '!') {
+    return false
+  }
+  if (opers.includes(input.right.charAt(0)) && input.right.charAt(0) != '!') {
+    return false
+  }
+  if (opers.includes(input.left.charAt(input.left.length - 1)) || opers.includes(input.right.charAt(input.right.length - 1))) {
+    return false
+  }
+
+  if (opers.includes(input.left[0]) || input.left[0] == '(' || input.right[0] == ')') {
+    isPrevSymLiter = false
+  } else {
+    isPrevSymLiter = true
+  }
+  for (let i = 1; i < input.left.length; i += 1) {
+    if (input.left[i] == '(' || input.left[i] == ')') {
+      continue
+    }
+    if (isPrevSymLiter && !opers.includes(input.left[i])) {
+      return false
+    }
+    if (!isPrevSymLiter && opers.includes(input.left[i]) && input.left[i] != '!') {
+      return false
+    }
+    if (opers.includes(input.left[i])) {
+      isPrevSymLiter = false
+    } else if (input.left[i] != '(' && input.left[i] != ')') {
+      isPrevSymLiter = true
+    }
+  }
+
+  if (opers.includes(input.right[0]) || input.right[0] == '(' || input.right[0] == ')') {
+    isPrevSymLiter = false
+  } else {
+    isPrevSymLiter = true
+  }
+  for (let i = 1; i < input.right.length; i += 1) {
+    if (input.right[i] == '(' || input.right[i] == ')') {
+      continue
+    }
+    if (isPrevSymLiter && !opers.includes(input.right[i])) {
+      return false
+    }
+    if (!isPrevSymLiter && opers.includes(input.right[i]) && input.right[i] != '!') {
+      return false
+    }
+    if (opers.includes(input.right[i])) {
+      isPrevSymLiter = false
+    } else if (input.right[i] != '(' && input.right[i] != ')') {
+      isPrevSymLiter = true
+    }
+  }
+
+  return true;
+}
