@@ -67,7 +67,7 @@ lineReaderNew.on('close', () => {
   }
 
   for (let i = 0; i < len; i += 1) {
-    if (data.input[i].right.length > 1 && !data.input[i].imp) {
+    if (data.input[i].right.length > 1 /*&& !data.input[i].imp*/) {
       evaluate(toPolish(Array.from(data.input[i].right)),
         data.input[i].left, 3)
     }
@@ -81,23 +81,9 @@ lineReaderNew.on('close', () => {
     }
   }
 
-  for (let i = 0; i < len; i += 1) {
-    if (!data.input[i].imp) {
-      const left = evaluate(toPolish(Array.from(data.input[i].left)), data.input[i].right)
-      const right = evaluate(toPolish(Array.from(data.input[i].right)), data.input[i].left)
-
-      if (left !== right) {
-        console.log(data.input[i], ' - error')
-        process.exit()
-      }
-    }
-  }
-
   len = data.output.length
 
   for (let i = 0; i < len; i += 1) {
     console.log(data.output[i], '  -  ', data.vars[data.output[i]] ? data.vars[data.output[i]].value : false)
   }
-  //console.log(data)
-
 })

@@ -1,5 +1,14 @@
 import { data } from './formatReader'
 
+const isAllVarFound = (input) => {
+  for (let i = 0; i < input.length; i += 1) {
+    if (typeof data.vars[input[i]] === 'undefined') {
+      return false
+    }
+  }
+  return true
+}
+
 const operators = {
   '+': (x, y) => x && y,
   '|': (x, y) => x || y,
@@ -91,7 +100,11 @@ export const evaluate = (expr, liter, foundType) => {
       else {
         const value = evaluate(toPolish(ev), token, type)
         if (typeof data.vars[token] === 'undefined') {
-          if (liter.charAt(token) - 1 >= 0 && liter[liter.charAt(token) - 1] === '!') {
+          // if (liter.charAt(token) - 1 >= 0 && liter[liter.charAt(token) - 1] === '!') {
+          //   data.vars[token] = { value: !value, type: foundType }
+          //   stack.push(!value)
+          // }
+          if (liter.indexOf(token) - 1 >= 0 && liter[liter.indexOf(token) - 1] === '!') {
             data.vars[token] = { value: !value, type: foundType }
             stack.push(!value)
           }
@@ -114,6 +127,13 @@ export const evaluate = (expr, liter, foundType) => {
   if ((typeof data.vars[liter] === 'undefined') || (data.vars[liter].value === false)) {
     data.vars[liter] = { value: val, type: foundType }
   }
+  if (expr.length < 3) {
+    if (expr.length == 2 && expr[1] == '!') {
+      data.vars[expr[0]] = { value: !val, type: foundType }
+    } else if (expr.length == 1) {
+      data.vars[expr[0]] = { value: val, type: foundType }
+    }
+  }
   return val
 }
 
@@ -125,8 +145,8 @@ export const manageString = (string, value) => {
         data.vars[string[i]] = data.vars[string[i] - 1] === '!' ? { value: !value, type: 2 } : { value: value, type: 2 }
       }
       else if (typeof data.vars[string[i]] !== 'undefined' && data.vars[string[i]].type === 3 && value !== data.vars[string[i]].value) {
-        console.log(string, ' - error')
-        process.exit()
+        //console.log(string, ' - error')
+        //process.exit()
       }
     }
   }
