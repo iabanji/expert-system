@@ -51,15 +51,19 @@ lineReaderNew.on('close', () => {
   for (let i = 0; i < len; i += 1) {
     if (data.input[i].left == '' || data.input[i].right == '') {
       throw new Error(`Not valid line  + ${i}`);
+      process.exit()
     }
     if (data.input[i].right.split("(").length - 1 != data.input[i].right.split(")").length - 1) {
       throw new Error(`Not valid line  + ${i}`);
+      process.exit()
     }
     if (data.input[i].left.split("(").length - 1 != data.input[i].left.split(")").length - 1) {
       throw new Error(`Not valid line  + ${i}`);
+      process.exit()
     }
     if (!validateInput(data.input[i])) {
       throw new Error(`Not valid line  + ${i}`);
+      process.exit()
     }
     let a = evaluate(toPolish(Array.from(data.input[i].left)),
       data.input[i].right, data.input[i].imp ? 2 : 3)
