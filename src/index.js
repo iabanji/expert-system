@@ -62,16 +62,24 @@ lineReaderNew.on('close', () => {
     if (!validateInput(data.input[i])) {
       throw new Error("Logical error on line " + i);
     }
-    evaluate(toPolish(Array.from(data.input[i].left)),
+    let a = evaluate(toPolish(Array.from(data.input[i].left)),
       data.input[i].right, data.input[i].imp ? 2 : 3)
+    if (typeof data.vars[data.input[i].right] === 'undefined') {
+      data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
+    }
+    else if (typeof data.vars[data.input[i].right] !== 'undefined' && data.vars[data.input[i].right].value == false) {
+      data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
+    }
+    //console.log(data.input[i].right, {value: a, foundType: data.input[i].imp ? 2 : 3})
   }
 
-  for (let i = 0; i < len; i += 1) {
-    if (data.input[i].right.length > 1 /*&& !data.input[i].imp*/) {
-      evaluate(toPolish(Array.from(data.input[i].right)),
-        data.input[i].left, 3)
-    }
-  }
+  // for (let i = 0; i < len; i += 1) {
+  //   if (data.input[i].right.length > 1 && !data.input[i].imp) {
+  //     let a = evaluate(toPolish(Array.from(data.input[i].right)),
+  //       data.input[i].left, 3)
+  //     data.vars[data.input[i].left] = {value: a, foundType: 3}
+  //  }
+  // }
 
   for (let i = 0; i < len; i += 1) {
     if (data.input[i].right.length > 1 && data.input[i].imp) {
@@ -86,4 +94,5 @@ lineReaderNew.on('close', () => {
   for (let i = 0; i < len; i += 1) {
     console.log(data.output[i], '  -  ', data.vars[data.output[i]] ? data.vars[data.output[i]].value : false)
   }
+  //console.log(data)
 })

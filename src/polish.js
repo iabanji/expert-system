@@ -22,9 +22,9 @@ const getStringByLetter = (liter) => {
   let j = 0
   for (let i = 0; i < len; i++) {
     if (data.input[i].right.includes(liter) /*&& !data.input[i].left.includes(liter)*/) {
-      if (j === search[liter].iter) {
+      //if (j === search[liter].iter) {
         return { ev: Array.from(data.input[i].left), type: data.input[i].imp ? 2 : 3 }
-      }
+      //}
       // if (j === search[liter].iter && !data.input[i].imp) {
       //   return { ev: Array.from(data.input[i].left), type: 3 }
       // }
@@ -41,6 +41,11 @@ export const toPolish = (tokenList) => {
   prec['|'] = 2
   prec['+'] = 2
   prec['('] = 1
+  // prec['!'] = 5
+  // prec['^'] = 3
+  // prec['|'] = 2
+  // prec['+'] = 4
+  // prec['('] = 1
   const opStack = []
   const postfixList = []
 
@@ -124,16 +129,16 @@ export const evaluate = (expr, liter, foundType) => {
     }
   })
   const val = stack.pop()
-  if ((typeof data.vars[liter] === 'undefined') || (data.vars[liter].value === false)) {
-    data.vars[liter] = { value: val, type: foundType }
-  }
-  if (expr.length < 3) {
-    if (expr.length == 2 && expr[1] == '!') {
-      data.vars[expr[0]] = { value: !val, type: foundType }
-    } else if (expr.length == 1) {
-      data.vars[expr[0]] = { value: val, type: foundType }
-    }
-  }
+  // if ((typeof data.vars[liter] === 'undefined') || (data.vars[liter].value === false)) {
+  //   data.vars[liter] = { value: val, type: foundType }
+  // }
+  // if (expr.length < 3) {
+  //   if (expr.length == 2 && expr[1] == '!') {
+  //     data.vars[expr[0]] = { value: !val, type: foundType }
+  //   } else if (expr.length == 1) {
+  //     data.vars[expr[0]] = { value: val, type: foundType }
+  //   }
+  // }
   return val
 }
 
@@ -171,7 +176,17 @@ export const validateInput = (input) => {
   } else {
     isPrevSymLiter = true
   }
+  if (!opers.includes(input.left[0]) && input.left[0] != '(' && input.left[0] != ')') {
+    if (input.right.indexOf(input.left[0]) >= 0) {
+      return false
+    }
+  }
   for (let i = 1; i < input.left.length; i += 1) {
+    if (!opers.includes(input.left[i]) && input.left[i] != '(' && input.left[i] != ')') {
+      if (input.right.indexOf(input.left[i]) >= 0) {
+        return false
+      }
+    }
     if (input.left[i] == '(' || input.left[i] == ')') {
       continue
     }

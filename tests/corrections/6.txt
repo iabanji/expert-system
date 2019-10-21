@@ -1,19 +1,20 @@
 A | B + C => E
-(F | G) + H =>E
+(F | G) + H => E
 
-[Initial facts here]
+=GH
+
 ?E
 
-With =, E should be false.
+#With =, E should be false.
 
-With =A, E should be true.
-With =B, E should be false.
-With =C, E should be false.
-With =AC, A should be false.
-With =BC, A should be true.
+#With =A, E should be true. ---
+#With =B, E should be false.
+#With =C, E should be false.
+#With =AC, A should be false. ---
+#With =BC, A should be true.
 
-With =F, E should be false.
-With =G, E should be false.
-With =H, E should be false.
-With =FH, A should be true.
-With =GH, A should be true.
+#With =F, E should be false.
+#With =G, E should be false.
+#With =H, E should be false.
+#With =FH, A should be true.
+#With =GH, A should be true.

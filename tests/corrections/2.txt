@@ -2,10 +2,11 @@ B + C => A
 D | E => B
 B => C
 
-[Initial facts here]
+=
+
 ?A
 
-With =, A should be false.
-With =D, A should be true.
-With =E, A should be true.
-With =DE, A should be true.
+#With =, A should be false.
+#With =D, A should be true.
+#With =E, A should be true.
+#With =DE, A should be true.

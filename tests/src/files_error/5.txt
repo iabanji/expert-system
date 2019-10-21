@@ -1,4 +1,4 @@
-D + E => A
+D + ED => A
 D | E <=> B
 B => C
 
