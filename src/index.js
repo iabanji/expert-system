@@ -44,11 +44,13 @@ lineReaderNew.on('line', (line) => {
 })
 
 lineReaderNew.on('close', () => {
+  let len;
+  let a;
   try{
     if (data.output.length < 1) {
       throw new Error(`Have not variables to find`);
     }
-    let len = data.input.length
+    len = data.input.length
     for (let i = 0; i < len; i += 1) {
       if (data.input[i].left == '' || data.input[i].right == '') {
         throw new Error(`Not valid line  + ${i}`);
@@ -62,7 +64,7 @@ lineReaderNew.on('close', () => {
       if (!validateInput(data.input[i])) {
         throw new Error(`Not valid line  + ${i}`);
       }
-      let a = evaluate(toPolish(Array.from(data.input[i].left)),
+      a = evaluate(toPolish(Array.from(data.input[i].left)),
         data.input[i].right, data.input[i].imp ? 2 : 3)
       if (typeof data.vars[data.input[i].right] === 'undefined') {
         data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
