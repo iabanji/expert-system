@@ -44,35 +44,36 @@ lineReaderNew.on('line', (line) => {
 })
 
 lineReaderNew.on('close', () => {
-  if (data.output.length < 1) {
-    throw new Error(`Have not variables to find`);
-  }
-  let len = data.input.length
-  for (let i = 0; i < len; i += 1) {
-    if (data.input[i].left == '' || data.input[i].right == '') {
-      throw new Error(`Not valid line  + ${i}`);
-      process.exit()
+  try{
+    if (data.output.length < 1) {
+      throw new Error(`Have not variables to find`);
     }
-    if (data.input[i].right.split("(").length - 1 != data.input[i].right.split(")").length - 1) {
-      throw new Error(`Not valid line  + ${i}`);
-      process.exit()
+    let len = data.input.length
+    for (let i = 0; i < len; i += 1) {
+      if (data.input[i].left == '' || data.input[i].right == '') {
+        throw new Error(`Not valid line  + ${i}`);
+      }
+      if (data.input[i].right.split("(").length - 1 != data.input[i].right.split(")").length - 1) {
+        throw new Error(`Not valid line  + ${i}`);
+      }
+      if (data.input[i].left.split("(").length - 1 != data.input[i].left.split(")").length - 1) {
+        throw new Error(`Not valid line  + ${i}`);
+      }
+      if (!validateInput(data.input[i])) {
+        throw new Error(`Not valid line  + ${i}`);
+      }
+      let a = evaluate(toPolish(Array.from(data.input[i].left)),
+        data.input[i].right, data.input[i].imp ? 2 : 3)
+      if (typeof data.vars[data.input[i].right] === 'undefined') {
+        data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
+      }
+      else if (typeof data.vars[data.input[i].right] !== 'undefined' && data.vars[data.input[i].right].value == false) {
+        data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
+      }
     }
-    if (data.input[i].left.split("(").length - 1 != data.input[i].left.split(")").length - 1) {
-      throw new Error(`Not valid line  + ${i}`);
-      process.exit()
-    }
-    if (!validateInput(data.input[i])) {
-      throw new Error(`Not valid line  + ${i}`);
-      process.exit()
-    }
-    let a = evaluate(toPolish(Array.from(data.input[i].left)),
-      data.input[i].right, data.input[i].imp ? 2 : 3)
-    if (typeof data.vars[data.input[i].right] === 'undefined') {
-      data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
-    }
-    else if (typeof data.vars[data.input[i].right] !== 'undefined' && data.vars[data.input[i].right].value == false) {
-      data.vars[data.input[i].right] = {value: a, foundType: data.input[i].imp ? 2 : 3} 
-    }
+  } catch(error) {
+    console.log(error)
+    process.exit()
   }
 
   for (let i = 0; i < len; i += 1) {
