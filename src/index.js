@@ -45,21 +45,21 @@ lineReaderNew.on('line', (line) => {
 
 lineReaderNew.on('close', () => {
   if (data.output.length < 1) {
-    throw new Error("Have not variables to find");
+    throw new Error(`Have not variables to find`);
   }
   let len = data.input.length
   for (let i = 0; i < len; i += 1) {
     if (data.input[i].left == '' || data.input[i].right == '') {
-      throw new Error('Not valid line ' + i);
+      throw new Error(`Not valid line  + ${i}`);
     }
     if (data.input[i].right.split("(").length - 1 != data.input[i].right.split(")").length - 1) {
-      throw new Error("Logical error on line " + i);
+      throw new Error(`Not valid line  + ${i}`);
     }
     if (data.input[i].left.split("(").length - 1 != data.input[i].left.split(")").length - 1) {
-      throw new Error("Logical error on line " + i);
+      throw new Error(`Not valid line  + ${i}`);
     }
     if (!validateInput(data.input[i])) {
-      throw new Error("Logical error on line " + i);
+      throw new Error(`Not valid line  + ${i}`);
     }
     let a = evaluate(toPolish(Array.from(data.input[i].left)),
       data.input[i].right, data.input[i].imp ? 2 : 3)
