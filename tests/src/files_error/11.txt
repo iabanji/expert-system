@@ -4,4 +4,4 @@ B => C
 
 = #A is false
 
-?A
+?

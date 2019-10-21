@@ -1,6 +1,5 @@
-
 D + E => A
-A => D + E
+A => D + E1
 D | E => B
 B => C
 
